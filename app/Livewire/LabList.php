@@ -13,6 +13,11 @@ class LabList extends Component
 
     public $search = '';
     public $selectedMatrix = null;
+    public $showQuoteForm = false;
+    public $name = '';
+    public $email = '';
+    public $message = '';
+    public $selectedTestId = null;
 
     protected $queryString = ['search', 'selectedMatrix'];
 
@@ -31,10 +36,36 @@ class LabList extends Component
         $this->resetPage(); // Resetear la paginación cuando se selecciona una nueva matriz
     }
 
+    public function openQuoteForm($testId)
+    {
+        $this->selectedTestId = $testId;
+        $this->showQuoteForm = true;
+    }
+
+    public function closeQuoteForm()
+    {
+        $this->showQuoteForm = false;
+        $this->reset(['name', 'email', 'message', 'selectedTestId']);
+    }
+
+    public function submitQuoteForm()
+    {
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'message' => 'required|string|max:500',
+        ]);
+
+        // Aquí puedes manejar el envío del formulario, por ejemplo, guardarlo en la base de datos o enviarlo por correo electrónico
+
+        $this->closeQuoteForm();
+        session()->flash('message', 'Solicitud de cotización enviada correctamente.');
+    }
+
     public function render()
     {
         $matrices = TestMatrix::all();
-
+    
         // Consulta para obtener los tests con paginación
         $tests = Test::with('lab')
             ->where('accreditation_status', 'Activa')
@@ -42,14 +73,18 @@ class LabList extends Component
                 $query->where('matrix', 'like', '%' . $this->selectedMatrix . '%');
             })
             ->when($this->search, function ($query) {
-                $query->where(function ($subQuery) {
-                    $subQuery->where('variable', 'like', '%' . $this->search . '%')
-                             ->orWhere('activity', 'like', '%' . $this->search . '%')
-                             ->orWhere('group', 'like', '%' . $this->search . '%');
+                $searchTerm = strtolower($this->search);
+                $query->where(function ($subQuery) use ($searchTerm) {
+                    $subQuery->whereRaw('LOWER(variable) like ?', ["%{$searchTerm}%"])
+                             ->orWhereRaw('LOWER(activity) like ?', ["%{$searchTerm}%"])
+                             ->orWhereRaw('LOWER(`group`) like ?', ["%{$searchTerm}%"])
+                             ->orWhereHas('lab', function ($labQuery) use ($searchTerm) {
+                                 $labQuery->whereRaw('LOWER(name) like ?', ["%{$searchTerm}%"]);
+                             });
                 });
             })
             ->paginate(10);
-
+    
         return view('livewire.lab-list', [
             'matrices' => $matrices,
             'tests' => $tests,

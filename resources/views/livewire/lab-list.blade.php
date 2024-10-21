@@ -60,7 +60,7 @@
                                 <strong>Componente:</strong> {{ $test->component }}
                             </p>
                         </div>
-                        <button class="bg-brand-color-1 text-white py-2 px-4 rounded-full">Cotizar</button>
+                        <button wire:click="openQuoteForm({{ $test->id }})" class="bg-brand-color-1 text-white py-2 px-4 rounded-full">Cotizar</button>
                     </div>
                 @empty
                     <p class="text-gray-600">No se encontraron laboratorios que coincidan con la búsqueda.</p>
@@ -73,4 +73,34 @@
             </div>
         </main>
     </div>
+
+    <!-- Quote Form Modal -->
+    @if($showQuoteForm)
+        <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-white p-8 rounded-lg shadow-lg w-1/2">
+                <h2 class="text-2xl font-bold mb-4">Cotizar</h2>
+                <form wire:submit.prevent="submitQuoteForm">
+                    <div class="mb-4">
+                        <label for="name" class="block text-gray-700">Nombre</label>
+                        <input type="text" id="name" wire:model="name" class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                        @error('name') <span class="text-red-500">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block text-gray-700">Correo Electrónico</label>
+                        <input type="email" id="email" wire:model="email" class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                        @error('email') <span class="text-red-500">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="mb-4">
+                        <label for="message" class="block text-gray-700">Mensaje</label>
+                        <textarea id="message" wire:model="message" class="w-full border border-gray-300 rounded-lg px-4 py-2"></textarea>
+                        @error('message') <span class="text-red-500">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="button" wire:click="closeQuoteForm" class="bg-gray-500 text-white py-2 px-4 rounded-lg mr-2">Cancelar</button>
+                        <button type="submit" class="bg-brand-color-1 text-white py-2 px-4 rounded-lg">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endif
 </div>
