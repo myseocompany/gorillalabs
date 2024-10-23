@@ -23,8 +23,11 @@ class DatabaseSeeder extends Seeder
         $this->call([
             MatrixSeeder::class,
             LabSeeder::class,
-            TestSeeder::class, // Añadir el TestSeeder aquí
-
+            TestSeeder::class, 
+            TestActivitiesSeeder::class,
+            DepartmentSeeder::class,
+            MunicipalitySeeder::class, 
+            
         ]);
     }
 }

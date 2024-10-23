@@ -15,9 +15,10 @@
     </head>
     <body class="antialiased font-sans bg-brand-color-2 text-white">
         <div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-brand-color-2 to-gray-800">
-            <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold text-white mb-4">¿Qué análisis buscas?</h1>
-                <p class="text-lg text-gray-300">Encuentra el análisis adecuado para tus necesidades.</p>
+            <div class="flex flex-col items-center text-center mb-8">
+                <img src="/img/gorilla_labs_logo_white.png" alt="" width="100" class="mb-4">
+                <h1 class="text-3xl font-bold text-white mb-4">¿Qué test o muestreo ambiental buscas?</h1>
+                <p class="text-lg text-gray-300">Encuentra el laboratorio adecuado para tus necesidades.</p>
             </div>
             <div class="w-full max-w-lg">
                 <form action="{{ route('result') }}" method="GET" class="relative">
@@ -32,6 +33,14 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </button>
+                    <div class="mb-6">
+                        <label for="activities" class="block text-lg font-semibold text-brand-color-2 mb-4">Tipo de servicio</label>
+                        <select id="activities" wire:model="selectedTypes" multiple class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1">
+                            @foreach ($testActivities as $activity)
+                                <option value="{{ $activity->name }}">{{ $activity->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </form>
             </div>
         </div>

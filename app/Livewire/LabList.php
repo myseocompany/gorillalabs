@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\TestMatrix;
+use App\Models\TestActivity;
 use App\Models\Test;
 
 class LabList extends Component
@@ -13,17 +14,31 @@ class LabList extends Component
 
     public $search = '';
     public $selectedMatrix = null;
+    public $selectedTypes = []; // Tipos de servicio seleccionados
     public $showQuoteForm = false;
     public $name = '';
     public $email = '';
     public $message = '';
     public $selectedTestId = null;
 
-    protected $queryString = ['search', 'selectedMatrix'];
+    protected $queryString = ['search', 'selectedMatrix', 'selectedTypes'];
 
     public function mount()
     {
         $this->search = request()->query('search', $this->search);
+        $this->selectedTypes = request()->query('type', $this->selectedTypes);
+    }
+
+    public function toggleType($type)
+    {
+        // Si el tipo ya está seleccionado, eliminarlo, de lo contrario, agregarlo
+        if (in_array($type, $this->selectedTypes)) {
+            $this->selectedTypes = array_diff($this->selectedTypes, [$type]);
+        } else {
+            $this->selectedTypes[] = $type;
+        }
+
+        $this->resetPage(); // Reiniciar la paginación al cambiar la selección
     }
 
     public function selectMatrix($matrix)
@@ -33,39 +48,14 @@ class LabList extends Component
         } else {
             $this->selectedMatrix = $matrix;
         }
-        $this->resetPage(); // Resetear la paginación cuando se selecciona una nueva matriz
-    }
-
-    public function openQuoteForm($testId)
-    {
-        $this->selectedTestId = $testId;
-        $this->showQuoteForm = true;
-    }
-
-    public function closeQuoteForm()
-    {
-        $this->showQuoteForm = false;
-        $this->reset(['name', 'email', 'message', 'selectedTestId']);
-    }
-
-    public function submitQuoteForm()
-    {
-        $this->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'message' => 'required|string|max:500',
-        ]);
-
-        // Aquí puedes manejar el envío del formulario, por ejemplo, guardarlo en la base de datos o enviarlo por correo electrónico
-
-        $this->closeQuoteForm();
-        session()->flash('message', 'Solicitud de cotización enviada correctamente.');
+        $this->resetPage(); // Reiniciar la paginación al seleccionar una nueva matriz
     }
 
     public function render()
     {
         $matrices = TestMatrix::all();
-    
+        $testActivities = TestActivity::all();
+
         // Consulta para obtener los tests con paginación
         $tests = Test::with('lab')
             ->where('accreditation_status', 'Activa')
@@ -76,6 +66,7 @@ class LabList extends Component
                 $searchTerm = strtolower($this->search);
                 $query->where(function ($subQuery) use ($searchTerm) {
                     $subQuery->whereRaw('LOWER(variable) like ?', ["%{$searchTerm}%"])
+                             ->orWhereRaw('LOWER(matrix) like ?', ["%{$searchTerm}%"])
                              ->orWhereRaw('LOWER(activity) like ?', ["%{$searchTerm}%"])
                              ->orWhereRaw('LOWER(`group`) like ?', ["%{$searchTerm}%"])
                              ->orWhereHas('lab', function ($labQuery) use ($searchTerm) {
@@ -83,10 +74,14 @@ class LabList extends Component
                              });
                 });
             })
+            ->when($this->selectedTypes, function ($query) {
+                $query->whereIn('activity', $this->selectedTypes);
+            })
             ->paginate(10);
-    
+
         return view('livewire.lab-list', [
             'matrices' => $matrices,
+            'testActivities' => $testActivities,
             'tests' => $tests,
         ]);
     }
