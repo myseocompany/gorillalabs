@@ -20,6 +20,7 @@ class LabList extends Component
     public $email = '';
     public $message = '';
     public $selectedTestId = null;
+    
 
     protected $queryString = ['search', 'selectedMatrix', 'selectedTypes'];
 
@@ -66,12 +67,12 @@ class LabList extends Component
                 $searchTerm = strtolower($this->search);
                 $query->where(function ($subQuery) use ($searchTerm) {
                     $subQuery->whereRaw('LOWER(variable) like ?', ["%{$searchTerm}%"])
-                             ->orWhereRaw('LOWER(matrix) like ?', ["%{$searchTerm}%"])
-                             ->orWhereRaw('LOWER(activity) like ?', ["%{$searchTerm}%"])
-                             ->orWhereRaw('LOWER(`group`) like ?', ["%{$searchTerm}%"])
-                             ->orWhereHas('lab', function ($labQuery) use ($searchTerm) {
-                                 $labQuery->whereRaw('LOWER(name) like ?', ["%{$searchTerm}%"]);
-                             });
+                        ->orWhereRaw('LOWER(matrix) like ?', ["%{$searchTerm}%"])
+                        ->orWhereRaw('LOWER(activity) like ?', ["%{$searchTerm}%"])
+                        ->orWhereRaw('LOWER(`group`) like ?', ["%{$searchTerm}%"])
+                        ->orWhereHas('lab', function ($labQuery) use ($searchTerm) {
+                            $labQuery->whereRaw('LOWER(name) like ?', ["%{$searchTerm}%"]);
+                        });
                 });
             })
             ->when($this->selectedTypes, function ($query) {
@@ -84,5 +85,32 @@ class LabList extends Component
             'testActivities' => $testActivities,
             'tests' => $tests,
         ]);
+    }
+
+    public function openQuoteForm($testId)
+    {
+         // Esto imprimirá el ID del test y detendrá la ejecución
+        $this->showQuoteForm = true;
+        // Aquí puedes añadir lógica adicional para manejar el testId si es necesario
+    }
+
+    public function closeQuoteForm()
+    {
+        $this->showQuoteForm = false;
+    }
+
+    public function submitQuoteForm()
+    {
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'message' => 'required|string|max:500',
+        ]);
+
+        dd($this->name, $this->email, $this->message, $this->selectedTestId);
+
+        // Lógica para manejar el envío del formulario
+
+        $this->closeQuoteForm();
     }
 }
