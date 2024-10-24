@@ -7,6 +7,7 @@ use Livewire\WithPagination;
 use App\Models\TestMatrix;
 use App\Models\TestActivity;
 use App\Models\Test;
+use App\Models\Customer;
 
 class LabList extends Component
 {
@@ -17,10 +18,10 @@ class LabList extends Component
     public $selectedTypes = []; // Tipos de servicio seleccionados
     public $showQuoteForm = false;
     public $name = '';
+    public $phone = '';
     public $email = '';
     public $message = '';
     public $selectedTestId = null;
-    
 
     protected $queryString = ['search', 'selectedMatrix', 'selectedTypes'];
 
@@ -89,9 +90,8 @@ class LabList extends Component
 
     public function openQuoteForm($testId)
     {
-         // Esto imprimirá el ID del test y detendrá la ejecución
+        $this->selectedTestId = $testId;
         $this->showQuoteForm = true;
-        // Aquí puedes añadir lógica adicional para manejar el testId si es necesario
     }
 
     public function closeQuoteForm()
@@ -103,11 +103,18 @@ class LabList extends Component
     {
         $this->validate([
             'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
             'email' => 'required|email|max:255',
             'message' => 'required|string|max:500',
         ]);
 
-        dd($this->name, $this->email, $this->message, $this->selectedTestId);
+        Customer::create([
+            'name' => $this->name,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'message' => $this->message,
+            'test_id' => $this->selectedTestId,
+        ]);
 
         // Lógica para manejar el envío del formulario
 

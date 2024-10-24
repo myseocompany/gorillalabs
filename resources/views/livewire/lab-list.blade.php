@@ -134,7 +134,6 @@
                             <textarea id="message" wire:model="message" class="w-full border border-gray-300 rounded-lg px-4 py-2"></textarea>
                             @error('message') <span class="text-red-500">{{ $message }}</span> @enderror
                         </div>
-                        <input type="hidden" name="" value="{{$test->id}}">
                         <div class="flex justify-end">
                             <button type="button" wire:click="closeQuoteForm" class="bg-gray-500 text-white py-2 px-4 rounded-lg mr-2">Cancelar</button>
                             <button type="submit" class="bg-brand-color-1 text-white py-2 px-4 rounded-lg">Enviar</button>

@@ -13,6 +13,7 @@ class CreateCustomersTable extends Migration
             $table->string('name');
             $table->string('phone');
             $table->string('email');
+            $table->text('message');
             $table->unsignedBigInteger('test_id');
             $table->timestamps();
         });
