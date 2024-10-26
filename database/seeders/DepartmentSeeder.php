@@ -14,10 +14,10 @@ class DepartmentSeeder extends Seeder
     public function run(): void
     {
         $departments = DB::table('import_ideam')
-            ->select('Departamento')
+            ->select('department')
             ->distinct()
-            ->whereNotNull('Departamento')
-            ->pluck('Departamento')
+            ->whereNotNull('department')
+            ->pluck('department')
             ->unique()
             ->toArray();
 

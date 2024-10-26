@@ -17,13 +17,34 @@ class TestSeeder extends Seeder
             $lab = DB::table('labs')->where('nit', trim($test->Nit))->first();
 
             if ($lab) {
+                // Obtener ambos IDs (activity_id y activity_type_id) en una sola consulta
+                $activityData = DB::table('test_activities')
+                    ->join('test_activity_types', 'test_activities.type_id', '=', 'test_activity_types.id')
+                    ->where('test_activities.name', trim($test->Actividad))
+                    ->select('test_activities.id as activity_id', 'test_activity_types.id as activity_type_id')
+                    ->first();
+
+                // Buscar el `department_id` correspondiente en la tabla `departments`
+                $department = isset($test->department) ? DB::table('departments')
+                    ->where('name', trim($test->department))
+                    ->first() : null;
+
+                // Buscar el `municipality_id` correspondiente en la tabla `municipalities`
+                $municipality = isset($test->municipality) ? DB::table('municipalities')
+                    ->where('name', trim($test->municipality))
+                    ->first() : null; 
+
                 // Insertar el test en la tabla tests
                 DB::table('tests')->insert([
                     'lab_id' => $lab->id,
                     'accreditation_status' => trim($test->{'Estado de la Acreditación'}),
                     'matrix' => trim($test->Matriz),
                     'component' => trim($test->Componente),
-                    'activity' => trim($test->Actividad),
+                    'activity_id' => $activityData ? $activityData->activity_id : null, // Insertar activity_id
+                    'activity_type_id' => $activityData ? $activityData->activity_type_id : null, // Insertar activity_type_id
+                    'department_id' => $department ? $department->id : null, // Insertar activity_id
+                    'municipality_id' => $municipality ? $municipality->id : null, // Insertar activity_type_id
+                    
                     'group' => trim($test->Grupo),
                     'variable' => trim($test->Variable),
                     'technique' => trim($test->Técnica),

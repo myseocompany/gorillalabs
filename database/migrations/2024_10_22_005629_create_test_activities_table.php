@@ -14,7 +14,14 @@ return new class extends Migration
         Schema::create('test_activities', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->unsignedBigInteger('type_id'); // Agregar columna type_id para la relación
             $table->timestamps();
+
+            // Definir la clave foránea
+            $table->foreign('type_id')
+                  ->references('id')
+                  ->on('test_activity_types')
+                  ->onDelete('cascade'); // Opcional: elimina los test_activities si se elimina el tipo relacionado
         });
     }
 

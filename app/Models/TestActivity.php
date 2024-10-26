@@ -9,8 +9,10 @@ class TestActivity extends Model
 {
     use HasFactory;
 
-    //protected $table = 'test_matrices'; // Asegúrate de que el nombre de la tabla sea correcto
+    protected $fillable = ['name', 'type_id'];
 
-    // Agrega los campos que se pueden asignar masivamente, si es necesario
-    protected $fillable = ['name'];
+    public function type()
+    {
+        return $this->belongsTo(TestActivityType::class, 'type_id');
+    }
 }

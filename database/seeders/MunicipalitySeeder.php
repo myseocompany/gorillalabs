@@ -14,20 +14,20 @@ class MunicipalitySeeder extends Seeder
     public function run()
     {
         $municipalities = DB::table('import_ideam')
-            ->select('Ciudad', 'Departamento')
+            ->select('municipality', 'department')
             ->distinct()
-            ->whereNotNull('Ciudad')
-            ->whereNotNull('Departamento')
+            ->whereNotNull('municipality')
+            ->whereNotNull('department')
             ->get();
 
         foreach ($municipalities as $municipality) {
             $department = DB::table('departments')
-                ->where('name', trim($municipality->Departamento))
+                ->where('name', trim($municipality->department))
                 ->first();
 
             if ($department) {
                 DB::table('municipalities')->insert([
-                    'name' => trim($municipality->Ciudad),
+                    'name' => trim($municipality->municipality),
                     'department_id' => $department->id,
                     'created_at' => now(),
                     'updated_at' => now(),
