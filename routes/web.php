@@ -10,7 +10,7 @@ Route::view('/result', 'result')->name('result');
 
 Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
 
-Route::view('/politicas-privacidad', 'privacy-policy')->name('privacy-policy');
+Route::view('/politicas-privacidad', 'privacy-policy.privacy-policy')->name('privacy-policy');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
