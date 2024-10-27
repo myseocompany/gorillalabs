@@ -18,61 +18,43 @@
     <!-- Filtros horizontales -->
     <div class="container mx-auto mt-4">
         <div class="bg-white p-4 rounded-lg shadow-sm flex space-x-4">
+            <!-- Filtro de Tipo de Actividad -->
+            <div>
+                <label for="activityType" class="block text-sm font-medium text-gray-700">Tipo de Actividad</label>
+                <select
+                    id="testActivityType" name="testActivityType"
+                    wire:model.live="testActivityType"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1"
+                    data-live-search="true">
+                    <option value="">Seleccione un tipo de actividad</option>
+                    @foreach ($activityTypes as $type)
+                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                    @endforeach
+                </select>
+            </div>
 
-
-    <!-- Filtro de Tipo de Actividad -->
-    <div>
-        <label 
-        for="activityType" 
-            class="block text-sm font-medium text-gray-700">Tipo de Actividad
-        
-        </label>
-        <select 
-            id="testActivityType" name="testActivityType" 
-            wire:model.live="testActivityType" 
-            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1"
-            data-live-search="true"
-            
-            >
-            <option value="">Seleccione un tipo de actividad</option>
-            @foreach ($activityTypes as $type)
-                <option value="{{ $type->id }}" 
-                    >
-                    {{ $type->name }}
-                </option>
-            @endforeach
-        </select>
-    </div>
-
-    <!-- Filtro de Actividad -->
-    <div>
-        @php
-            // dd($activities);   
-            @endphp
-        <label for="activity" class="block text-sm font-medium text-gray-700">Actividad</label>
-        <select 
-            id="testActivity" name="testActivity" 
-            wire:model.live="testActivity" 
-            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1" 
-            data-live-search="true"
-            {{ is_null($testActivityType) ? 'disabled' : '' }}
-        >
-            <option value="">Seleccione una actividad</option>
-            
-            @foreach ($activities as $activity)
-                <option value="{{ $activity->id }}">{{ $activity->name }}</option>
-            @endforeach
-        </select>
-    </div>
-
-
+            <!-- Filtro de Actividad -->
+            <div>
+                <label for="activity" class="block text-sm font-medium text-gray-700">Actividad</label>
+                <select
+                    id="testActivity" name="testActivity"
+                    wire:model.live="testActivity"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1"
+                    data-live-search="true"
+                    {{ is_null($testActivityType) ? 'disabled' : '' }}>
+                    <option value="">Seleccione una actividad</option>
+                    @foreach ($activities as $activity)
+                    <option value="{{ $activity->id }}">{{ $activity->name }}</option>
+                    @endforeach
+                </select>
+            </div>
 
             <!-- Filtro de Matriz -->
             <div>
                 <label for="matrix" class="block text-sm font-medium text-gray-700">Matriz</label>
-                <select 
-                    id="matrix" 
-                    name="matrix" 
+                <select
+                    id="matrix"
+                    name="matrix"
                     wire:model.live="selectedMatrix"
                     class="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1">
                     <option value="">Seleccione una matriz</option>
@@ -83,30 +65,30 @@
             </div>
 
             <!-- Select de Departamentos -->
-        <div>
-            <label for="department" class="block text-sm font-medium text-gray-700">Departamento</label>
-            <select id="department" 
-                wire:model.live="selectedDepartment"
-                class="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1">
-                <option value="">Seleccione un departamento</option>
-                @foreach($departments as $department)
-                <option value="{{ $department->id }}">{{ $department->name }}</option>
-                @endforeach
-            </select>
-        </div>
+            <div>
+                <label for="department" class="block text-sm font-medium text-gray-700">Departamento</label>
+                <select id="department"
+                    wire:model.live="selectedDepartment"
+                    class="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1">
+                    <option value="">Seleccione un departamento</option>
+                    @foreach($departments as $department)
+                    <option value="{{ $department->id }}">{{ $department->name }}</option>
+                    @endforeach
+                </select>
+            </div>
 
-        <!-- Select de Municipios -->
-        <div>
-            <label for="municipality" class="block text-sm font-medium text-gray-700">Municipio</label>
-            <select id="municipality" 
-                wire:model.live="selectedMunicipality"
-                class="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1" {{ is_null($selectedDepartment) ? 'disabled' : '' }}>
-                <option value="">Seleccione un municipio</option>
-                @foreach($municipalities as $municipality)
-                <option value="{{ $municipality->id }}">{{ $municipality->name }}</option>
-                @endforeach
-            </select>
-        </div>
+            <!-- Select de Municipios -->
+            <div>
+                <label for="municipality" class="block text-sm font-medium text-gray-700">Municipio</label>
+                <select id="municipality"
+                    wire:model.live="selectedMunicipality"
+                    class="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1" {{ is_null($selectedDepartment) ? 'disabled' : '' }}>
+                    <option value="">Seleccione un municipio</option>
+                    @foreach($municipalities as $municipality)
+                    <option value="{{ $municipality->id }}">{{ $municipality->name }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
     </div>
 
@@ -115,46 +97,40 @@
         <main class="flex-1 p-4">
             <div class="mb-6">
                 <h1 class="text-3xl font-bold text-brand-color-2">Resultados para: "{{ $search }}"</h1>
-                <p class="text-gray-600">{{ $tests->total() }} test encontrados.
-
-                   
-                </p>
+                <p class="text-gray-600">{{ $tests->total() }} test encontrados.</p>
                 <!-- Mostrar etiquetas de los filtros seleccionados -->
                 <div class="flex flex-wrap space-x-2 mt-2">
                     @if($testActivityType)
-                        <span class="bg-brand-color-1 text-white px-3 py-1 rounded-full text-sm flex items-center">
-                            Tipo de Actividad: {{ optional($activityTypes->firstWhere('id', $testActivityType))->name }}
-                            <button wire:click="clearTestActivityType" class="ml-2 text-white text-xs focus:outline-none">✕</button>
-                        </span>
+                    <span class="bg-brand-color-1 text-white px-3 py-1 rounded-full text-sm flex items-center">
+                        Tipo de Actividad: {{ optional($activityTypes->firstWhere('id', $testActivityType))->name }}
+                        <button wire:click="clearTestActivityType" class="ml-2 text-white text-xs focus:outline-none">✕</button>
+                    </span>
                     @endif
                     @if($testActivity)
-                        <span class="bg-brand-color-1 text-white px-3 py-1 rounded-full text-sm flex items-center">
-                            Actividad: {{ optional($activities->firstWhere('id', $testActivity))->name }}
-                            <button wire:click="clearTestActivity" class="ml-2 text-white text-xs focus:outline-none">✕</button>
-                        </span>
+                    <span class="bg-brand-color-1 text-white px-3 py-1 rounded-full text-sm flex items-center">
+                        Actividad: {{ optional($activities->firstWhere('id', $testActivity))->name }}
+                        <button wire:click="clearTestActivity" class="ml-2 text-white text-xs focus:outline-none">✕</button>
+                    </span>
                     @endif
                     @if($selectedMatrix)
-                        <span class="bg-brand-color-1 text-white px-3 py-1 rounded-full text-sm flex items-center">
-                            Matriz: {{ $selectedMatrix }}
-                            <button wire:click="clearSelectedMatrix" class="ml-2 text-white text-xs focus:outline-none">✕</button>
-                        </span>
+                    <span class="bg-brand-color-1 text-white px-3 py-1 rounded-full text-sm flex items-center">
+                        Matriz: {{ $selectedMatrix }}
+                        <button wire:click="clearSelectedMatrix" class="ml-2 text-white text-xs focus:outline-none">✕</button>
+                    </span>
                     @endif
                     @if($selectedDepartment)
-                        <span class="bg-brand-color-1 text-white px-3 py-1 rounded-full text-sm flex items-center">
-                            Departamento: {{ optional($departments->firstWhere('id', $selectedDepartment))->name }}
-                            <button wire:click="clearSelectedDepartment" class="ml-2 text-white text-xs focus:outline-none">✕</button>
-                        </span>
+                    <span class="bg-brand-color-1 text-white px-3 py-1 rounded-full text-sm flex items-center">
+                        Departamento: {{ optional($departments->firstWhere('id', $selectedDepartment))->name }}
+                        <button wire:click="clearSelectedDepartment" class="ml-2 text-white text-xs focus:outline-none">✕</button>
+                    </span>
                     @endif
                     @if($selectedMunicipality)
-                        <span class="bg-brand-color-1 text-white px-3 py-1 rounded-full text-sm flex items-center">
-                            Municipio: {{ optional($municipalities->firstWhere('id', $selectedMunicipality))->name }}
-                            <button wire:click="clearSelectedMunicipality" class="ml-2 text-white text-xs focus:outline-none">✕</button>
-                        </span>
+                    <span class="bg-brand-color-1 text-white px-3 py-1 rounded-full text-sm flex items-center">
+                        Municipio: {{ optional($municipalities->firstWhere('id', $selectedMunicipality))->name }}
+                        <button wire:click="clearSelectedMunicipality" class="ml-2 text-white text-xs focus:outline-none">✕</button>
+                    </span>
                     @endif
                 </div>
-                
-                
-                
             </div>
 
             <div class="space-y-4">
@@ -210,14 +186,25 @@
                             <textarea id="message" wire:model="message" class="w-full border border-gray-300 rounded-lg px-4 py-2"></textarea>
                             @error('message') <span class="text-red-500">{{ $message }}</span> @enderror
                         </div>
+                        <div class="mt-4">
+                            <a href="{{ route('privacy-policy') }}" class="text-green-600 hover:underline">Conoce nuestras Política de Privacidad</a>
+                        </div>
                         <div class="flex justify-end">
                             <button type="button" wire:click="closeQuoteForm" class="bg-gray-500 text-white py-2 px-4 rounded-lg mr-2">Cancelar</button>
                             <button type="submit" class="bg-brand-color-1 text-white py-2 px-4 rounded-lg">Enviar</button>
                         </div>
                     </form>
+
                 </div>
             </div>
             @endif
         </main>
     </div>
+
+    <!-- Footer -->
+    <footer class="bg-brand-color-2 text-white py-4 mt-8">
+        <div class="container mx-auto text-center">
+            <a href="{{ route('privacy-policy') }}" class="text-white hover:underline">Política de Privacidad</a>
+        </div>
+    </footer>
 </div>
