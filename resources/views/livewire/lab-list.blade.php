@@ -142,11 +142,23 @@
                         <h3 class="text-lg font-semibold text-brand-color-1">
                             {{ $test->matrix }} - {{ $test->variable }} ({{ $test->activity }})
                         </h3>
-                        <p class="text-gray-600">
-                            <strong>Grupo:</strong> {{ $test->group }} <br>
-                            <strong>Técnica:</strong> {{ $test->technique }} <br>
-                            <strong>Componente:</strong> {{ $test->component }}
-                        </p>
+                        <div>
+                            
+                            <p>
+                                <strong>Matriz:</strong> {{ $test->matrix }} <br>
+                                @if(isset($test->department))
+                                {{ $test->department->name }}, 
+                                @endif
+                                @if(isset($test->municipality))
+                                {{ $test->municipality->name }}
+                                @endif
+                            </p>
+                            <h4 class="text-gray-600">
+                                {{ $test->group }}, 
+                                {{ $test->technique }},
+                                {{ $test->component }}
+                            </h4>
+                        </div>
                     </div>
                     <button wire:click="openQuoteForm({{ $test->id }})" class="bg-brand-color-1 text-white py-2 px-4 rounded-full">Cotizar</button>
                 </div>

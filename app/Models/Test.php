@@ -19,4 +19,13 @@ class Test extends Model
     {
         return $this->belongsTo(Lab::class);
     }
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+    public function municipality()
+    {
+        return $this->belongsTo(Municipality::class);
+    }
+
 }
