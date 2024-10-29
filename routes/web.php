@@ -6,7 +6,9 @@ use App\Http\Controllers\CustomerController;
 
 Route::get('/', [IndexController::class, 'index'])->name('home');
 
-Route::view('/result', 'result')->name('result'); 
+Route::view('/result', 'result')->name('result');
+Route::view('/promo', 'promo')->name('promo');
+
 
 Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
 
