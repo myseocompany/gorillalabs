@@ -11,6 +11,9 @@ use App\Models\Test;
 use App\Models\Customer;
 use App\Models\Department;
 use App\Models\Municipality;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
 
 class LabList extends Component
 {
@@ -40,7 +43,7 @@ class LabList extends Component
 
     public function updatedSelectedDepartment($departmentId)
     {
-        $this->municipalities = $departmentId 
+        $this->municipalities = $departmentId
             ? Municipality::where('department_id', $departmentId)->get()
             : collect();
         $this->selectedMunicipality = null;
@@ -50,7 +53,7 @@ class LabList extends Component
     public function render()
     {
         $activityTypes = TestActivityType::all();
-        $activities = $this->testActivityType 
+        $activities = $this->testActivityType
             ? TestActivity::where('type_id', $this->testActivityType)->get()
             : TestActivity::all();
         $matrices = TestMatrix::all();
@@ -81,7 +84,7 @@ class LabList extends Component
             'tests' => $tests,
         ]);
     }
-    
+
     public function openQuoteForm($testId)
     {
         $this->selectedTestId = $testId;
@@ -93,6 +96,7 @@ class LabList extends Component
         $this->showQuoteForm = false;
     }
 
+
     public function submitQuoteForm()
     {
         $this->validate([
@@ -102,7 +106,17 @@ class LabList extends Component
             'message' => 'required|string|max:500',
         ]);
 
-        Customer::create([
+        // Obtener todos los datos del test asociado al selectedTestId
+        $test = Test::with('lab')->find($this->selectedTestId);
+
+        if (!$test) {
+            // Manejar el caso en que no se encuentre el test
+            Log::error('Test no encontrado', ['test_id' => $this->selectedTestId]);
+            return;
+        }
+
+        // Crear el cliente en la base de datos local
+        $customer = Customer::create([
             'name' => $this->name,
             'phone' => $this->phone,
             'email' => $this->email,
@@ -110,40 +124,69 @@ class LabList extends Component
             'test_id' => $this->selectedTestId,
         ]);
 
+        // Datos a enviar al CRM
+        $crmData = [
+            'name' => $this->name,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'message' => $this->message,
+            'test_id' => $this->selectedTestId,
+            'test_name' => $test->name,
+            'test_variable' => $test->variable,
+            'test_matrix' => $test->matrix,
+            'test_group' => $test->group,
+            'lab_name' => $test->lab->name,
+            'lab_address' => $test->lab->address,
+            'lab_phone' => $test->lab->phone,
+            'lab_email' => $test->lab->email,
+        ];
+
+        dd($crmData);
+
+        // Enviar los datos al CRM
+        $response = Http::get('https://gorilalab.aricrm.co/api/customers/save', $crmData);
+
+        if ($response->successful()) {
+            // Manejar la respuesta exitosa del CRM si es necesario
+            Log::info('Solicitud exitosa al CRM', ['response' => $response->json()]);
+        } else {
+            // Manejar el error de la solicitud al CRM si es necesario
+            Log::error('Error en la solicitud al CRM', ['response' => $response->json()]);
+        }
+
         $this->closeQuoteForm();
     }
 
     public function clearTestActivityType()
-{
-    $this->testActivityType = null;
-    $this->testActivity = null; // También limpiar la actividad seleccionada
-    $this->resetPage();
-}
+    {
+        $this->testActivityType = null;
+        $this->testActivity = null; // También limpiar la actividad seleccionada
+        $this->resetPage();
+    }
 
-public function clearTestActivity()
-{
-    $this->testActivity = null;
-    $this->resetPage();
-}
+    public function clearTestActivity()
+    {
+        $this->testActivity = null;
+        $this->resetPage();
+    }
 
-public function clearSelectedMatrix()
-{
-    $this->selectedMatrix = null;
-    $this->resetPage();
-}
+    public function clearSelectedMatrix()
+    {
+        $this->selectedMatrix = null;
+        $this->resetPage();
+    }
 
-public function clearSelectedDepartment()
-{
-    $this->selectedDepartment = null;
-    $this->selectedMunicipality = null; // Limpiar el municipio también
-    $this->municipalities = collect(); // Restablecer la lista de municipios
-    $this->resetPage();
-}
+    public function clearSelectedDepartment()
+    {
+        $this->selectedDepartment = null;
+        $this->selectedMunicipality = null; // Limpiar el municipio también
+        $this->municipalities = collect(); // Restablecer la lista de municipios
+        $this->resetPage();
+    }
 
-public function clearSelectedMunicipality()
-{
-    $this->selectedMunicipality = null;
-    $this->resetPage();
-}
-
+    public function clearSelectedMunicipality()
+    {
+        $this->selectedMunicipality = null;
+        $this->resetPage();
+    }
 }

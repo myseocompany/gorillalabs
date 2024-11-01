@@ -17,77 +17,84 @@
 
     <!-- Filtros horizontales -->
     <div class="container mx-auto mt-4">
-        <div class="bg-white p-4 rounded-lg shadow-sm flex space-x-4">
-            <!-- Filtro de Tipo de Actividad -->
-            <div>
-                <label for="activityType" class="block text-sm font-medium text-gray-700">Tipo de Actividad</label>
-                <select
-                    id="testActivityType" name="testActivityType"
-                    wire:model.live="testActivityType"
-                    class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1"
-                    data-live-search="true">
-                    <option value="">Seleccione un tipo de actividad</option>
-                    @foreach ($activityTypes as $type)
-                    <option value="{{ $type->id }}">{{ $type->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+        <div x-data="{ open: false }" class="bg-white p-4 rounded-lg shadow-sm">
+            <!-- Botón para desplegar filtros en vista de teléfono -->
+            <button @click="open = !open" class="w-full md:hidden bg-brand-color-1 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+                Filtros
+            </button>
+            <!-- Contenedor de filtros -->
+            <div :class="{'hidden': !open, 'block': open}" class="mt-4 flex flex-col space-y-4 md:flex md:flex-row md:space-y-0 md:space-x-4">
+                <!-- Filtro de Tipo de Actividad -->
+                <div class="w-full md:w-auto">
+                    <label for="activityType" class="block text-sm font-medium text-gray-700">Tipo de Actividad</label>
+                    <select
+                        id="testActivityType" name="testActivityType"
+                        wire:model.live="testActivityType"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1"
+                        data-live-search="true">
+                        <option value="">Seleccione un tipo de actividad</option>
+                        @foreach ($activityTypes as $type)
+                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <!-- Filtro de Actividad -->
-            <div>
-                <label for="activity" class="block text-sm font-medium text-gray-700">Actividad</label>
-                <select
-                    id="testActivity" name="testActivity"
-                    wire:model.live="testActivity"
-                    class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1"
-                    data-live-search="true"
-                    {{ is_null($testActivityType) ? 'disabled' : '' }}>
-                    <option value="">Seleccione una actividad</option>
-                    @foreach ($activities as $activity)
-                    <option value="{{ $activity->id }}">{{ $activity->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+                <!-- Filtro de Actividad -->
+                <div class="w-full md:w-auto">
+                    <label for="activity" class="block text-sm font-medium text-gray-700">Actividad</label>
+                    <select
+                        id="testActivity" name="testActivity"
+                        wire:model.live="testActivity"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1"
+                        data-live-search="true"
+                        {{ is_null($testActivityType) ? 'disabled' : '' }}>
+                        <option value="">Seleccione una actividad</option>
+                        @foreach ($activities as $activity)
+                        <option value="{{ $activity->id }}">{{ $activity->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <!-- Filtro de Matriz -->
-            <div>
-                <label for="matrix" class="block text-sm font-medium text-gray-700">Matriz</label>
-                <select
-                    id="matrix"
-                    name="matrix"
-                    wire:model.live="selectedMatrix"
-                    class="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1">
-                    <option value="">Seleccione una matriz</option>
-                    @foreach ($matrices as $matrix)
-                    <option value="{{ $matrix->name }}">{{ $matrix->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+                <!-- Filtro de Matriz -->
+                <div class="w-full md:w-auto">
+                    <label for="matrix" class="block text-sm font-medium text-gray-700">Matriz</label>
+                    <select
+                        id="matrix"
+                        name="matrix"
+                        wire:model.live="selectedMatrix"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1">
+                        <option value="">Seleccione una matriz</option>
+                        @foreach ($matrices as $matrix)
+                        <option value="{{ $matrix->name }}">{{ $matrix->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <!-- Select de Departamentos -->
-            <div>
-                <label for="department" class="block text-sm font-medium text-gray-700">Departamento</label>
-                <select id="department"
-                    wire:model.live="selectedDepartment"
-                    class="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1">
-                    <option value="">Seleccione un departamento</option>
-                    @foreach($departments as $department)
-                    <option value="{{ $department->id }}">{{ $department->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+                <!-- Select de Departamentos -->
+                <div class="w-full md:w-auto">
+                    <label for="department" class="block text-sm font-medium text-gray-700">Departamento</label>
+                    <select id="department"
+                        wire:model.live="selectedDepartment"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1">
+                        <option value="">Seleccione un departamento</option>
+                        @foreach($departments as $department)
+                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <!-- Select de Municipios -->
-            <div>
-                <label for="municipality" class="block text-sm font-medium text-gray-700">Municipio</label>
-                <select id="municipality"
-                    wire:model.live="selectedMunicipality"
-                    class="border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1" {{ is_null($selectedDepartment) ? 'disabled' : '' }}>
-                    <option value="">Seleccione un municipio</option>
-                    @foreach($municipalities as $municipality)
-                    <option value="{{ $municipality->id }}">{{ $municipality->name }}</option>
-                    @endforeach
-                </select>
+                <!-- Select de Municipios -->
+                <div class="w-full md:w-auto">
+                    <label for="municipality" class="block text-sm font-medium text-gray-700">Municipio</label>
+                    <select id="municipality"
+                        wire:model.live="selectedMunicipality"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-color-1" {{ is_null($selectedDepartment) ? 'disabled' : '' }}>
+                        <option value="">Seleccione un municipio</option>
+                        @foreach($municipalities as $municipality)
+                        <option value="{{ $municipality->id }}">{{ $municipality->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
         </div>
     </div>
@@ -143,18 +150,18 @@
                             {{ $test->matrix }} - {{ $test->variable }} ({{ $test->activity }})
                         </h3>
                         <div>
-                            
+
                             <p>
                                 <strong>Matriz:</strong> {{ $test->matrix }} <br>
                                 @if(isset($test->department))
-                                {{ $test->department->name }}, 
+                                {{ $test->department->name }},
                                 @endif
                                 @if(isset($test->municipality))
                                 {{ $test->municipality->name }}
                                 @endif
                             </p>
                             <h4 class="text-gray-600">
-                                {{ $test->group }}, 
+                                {{ $test->group }},
                                 {{ $test->technique }},
                                 {{ $test->component }}
                             </h4>
@@ -175,7 +182,7 @@
             <!-- Quote Form Modal -->
             @if($showQuoteForm)
             <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                <div class="bg-white p-8 rounded-lg shadow-lg w-1/2">
+                <div class="bg-white p-8 rounded-lg shadow-lg w-full md:w-1/2 mx-4">
                     <h2 class="text-2xl font-bold mb-4">Cotizar</h2>
                     <form wire:submit.prevent="submitQuoteForm">
                         <div class="mb-4">
@@ -206,17 +213,14 @@
                             <button type="submit" class="bg-brand-color-1 text-white py-2 px-4 rounded-lg">Enviar</button>
                         </div>
                     </form>
-
                 </div>
             </div>
             @endif
-        </main>
-    </div>
 
-    <!-- Footer -->
-    <footer class="bg-brand-color-2 text-white py-4 mt-8">
-        <div class="container mx-auto text-center">
-            <a href="{{ route('privacy-policy') }}" class="text-white hover:underline">Política de Privacidad</a>
-        </div>
-    </footer>
-</div>
+            <!-- Footer -->
+            <footer class="bg-brand-color-2 text-white py-4 mt-8">
+                <div class="container mx-auto text-center">
+                    <a href="{{ route('privacy-policy') }}" class="text-white hover:underline">Política de Privacidad</a>
+                </div>
+            </footer>
+    </div>
