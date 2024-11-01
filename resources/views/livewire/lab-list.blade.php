@@ -23,7 +23,7 @@
                 Filtros
             </button>
             <!-- Contenedor de filtros -->
-            <div :class="{'hidden': !open, 'block': open}" class="mt-4 flex flex-col space-y-4 md:flex md:flex-row md:space-y-0 md:space-x-4">
+            <div :class="{'hidden': !open, 'block': open}" class="mt-4 flex flex-col space-y-4 md:flex md:flex-row md:space-y-0 md:space-x-4 md:block">
                 <!-- Filtro de Tipo de Actividad -->
                 <div class="w-full md:w-auto">
                     <label for="activityType" class="block text-sm font-medium text-gray-700">Tipo de Actividad</label>
@@ -182,7 +182,7 @@
             <!-- Quote Form Modal -->
             @if($showQuoteForm)
             <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                <div class="bg-white p-8 rounded-lg shadow-lg w-full md:w-1/2 mx-4">
+                <div class="bg-white p-8 rounded-lg shadow-lg w-full md:w-1/2 mx-4 md:mx-auto">
                     <h2 class="text-2xl font-bold mb-4">Cotizar</h2>
                     <form wire:submit.prevent="submitQuoteForm">
                         <div class="mb-4">
