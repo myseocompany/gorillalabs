@@ -216,7 +216,6 @@
                 </div>
             </div>
             @endif
-
             <!-- Footer -->
             <footer class="bg-brand-color-2 text-white py-4 mt-8">
                 <div class="container mx-auto text-center">
