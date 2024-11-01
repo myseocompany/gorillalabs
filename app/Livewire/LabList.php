@@ -129,19 +129,12 @@ class LabList extends Component
             'name' => $this->name,
             'phone' => $this->phone,
             'email' => $this->email,
-            'message' => $this->message,
-            'test_id' => $this->selectedTestId,
-            'test_name' => $test->name,
-            'test_variable' => $test->variable,
-            'test_matrix' => $test->matrix,
-            'test_group' => $test->group,
-            'lab_name' => $test->lab->name,
-            'lab_address' => $test->lab->address,
-            'lab_phone' => $test->lab->phone,
-            'lab_email' => $test->lab->email,
+            'notes' => $this->message,
+            'analysis' => $test->name,
+            'samples' => $test->variable,
         ];
 
-        dd($crmData);
+        // dd($crmData);
 
         // Enviar los datos al CRM
         $response = Http::get('https://gorilalab.aricrm.co/api/customers/save', $crmData);
