@@ -23,7 +23,7 @@
                 Filtros
             </button>
             <!-- Contenedor de filtros -->
-            <div :class="{'hidden': !open, 'block': open}" class="mt-4 flex flex-col space-y-4 md:flex md:flex-row md:space-y-0 md:space-x-4 md:block">
+            <div :class="{'hidden': !open, 'block': open}" class="mt-4 flex flex-col space-y-4 md:flex md:flex-row md:space-y-0 md:space-x-4">
                 <!-- Filtro de Tipo de Actividad -->
                 <div class="w-full md:w-auto">
                     <label for="activityType" class="block text-sm font-medium text-gray-700">Tipo de Actividad</label>
