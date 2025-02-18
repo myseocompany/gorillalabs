@@ -137,7 +137,7 @@ class LabList extends Component
         // dd($crmData);
 
         // Enviar los datos al CRM
-        $response = Http::get('https://gorilalab.aricrm.co/api/customers/save', $crmData);
+        $response = Http::get('https://gorillalab.aricrm.co/api/customers/save', $crmData);
 
         if ($response->successful()) {
             // Manejar la respuesta exitosa del CRM si es necesario
