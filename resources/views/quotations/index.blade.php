@@ -9,8 +9,7 @@
         </a>
     </div>
     
-    <h2 class="text-2xl font-bold mb-6">Lista de Cotizaciones</h2>
-
+    
     @if(session('success'))
         <div class="bg-green-200 text-green-800 p-3 rounded-md mb-4">
             {{ session('success') }}
