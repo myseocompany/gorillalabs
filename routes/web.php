@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\QuotationController;
+use App\Http\Controllers\LabController;
 
 Route::get('/', [IndexController::class, 'index'])->name('home');
 
@@ -23,3 +25,21 @@ Route::view('profile', 'profile')
     ->name('profile');
 
 require __DIR__.'/auth.php';
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/quotations', [QuotationController::class, 'index'])->name('quotations.index');
+    Route::get('/quotations/create', [QuotationController::class, 'create'])->name('quotations.create');
+    Route::post('/quotations', [QuotationController::class, 'store'])->name('quotations.store');
+    Route::get('/quotations/{quotation}', [QuotationController::class, 'show'])->name('quotations.show');
+});
+
+
+
+
+Route::get('/labs/edit', [LabController::class, 'edit'])->name('labs.edit')->middleware('auth');
+Route::post('/labs/{lab}/update', [LabController::class, 'update'])->middleware(['auth'])->name('labs.update');
+Route::get('/labs', [LabController::class, 'show'])->name('labs.show')->middleware('auth');
+
+
