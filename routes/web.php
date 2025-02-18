@@ -5,6 +5,7 @@ use App\Http\Controllers\IndexController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\LabController;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', [IndexController::class, 'index'])->name('home');
 
@@ -42,4 +43,12 @@ Route::get('/labs/edit', [LabController::class, 'edit'])->name('labs.edit')->mid
 Route::post('/labs/{lab}/update', [LabController::class, 'update'])->middleware(['auth'])->name('labs.update');
 Route::get('/labs', [LabController::class, 'show'])->name('labs.show')->middleware('auth');
 
+Route::post('/clear-cache', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    Artisan::call('route:clear');
+
+    return back()->with('success', '✅ Caché limpiada correctamente.');
+});
 

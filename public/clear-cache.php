@@ -1,10 +1,13 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 use Illuminate\Support\Facades\Artisan;
 
-require __DIR__.'/../bootstrap/autoload.php';
+require __DIR__.'/../repositories/gorillalabs/bootstrap/autoload.php';
 
-$app = require_once __DIR__.'/../bootstrap/app.php';
+$app = require_once __DIR__.'/../repositories/gorillalabs/bootstrap/app.php';
 $app->make(Illuminate\Contracts\Http\Kernel::class)->handle(
     Illuminate\Http\Request::capture()
 );

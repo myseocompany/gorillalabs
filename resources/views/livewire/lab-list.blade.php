@@ -145,7 +145,11 @@
                 <!-- Test Card -->
                 <div class="bg-white rounded-lg shadow-sm p-4 flex items-start justify-between">
                     <div>
-                        <h6 class="text-slate-400">{{ Str::title($test->lab->name) }}</h6>
+                        <!-- 
+                        <h6 class="text-slate-400">
+                            {{ Str::title($test->lab->name) }}
+                        </h6>
+                    -->
                         <h3 class="text-lg font-semibold text-brand-color-1">
                             {{ $test->matrix }} - {{ $test->variable }} ({{ $test->activity }})
                         </h3>
