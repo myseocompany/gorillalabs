@@ -85,23 +85,45 @@ class QuotationController extends Controller
      */
     public function index()
     {
-        $lab = auth()->user()->lab;
+        $user = auth()->user();
 
-        if (!$lab) {
-            return redirect()->route('home')->with('error', 'No tienes un laboratorio asignado.');
+        // Si el usuario es administrador, ve todas las cotizaciones
+        if ($user->role === 'admin') {
+            $quotations = Quotation::all();
+        } else {
+            // Si es un laboratorio, solo ve las cotizaciones de su lab
+            $lab = $user->lab;
+
+            if (!$lab) {
+                return redirect()->route('home')->with('error', 'No tienes un laboratorio asignado.');
+            }
+
+            $quotations = Quotation::where('lab_id', $lab->id)->get();
         }
-
-        $quotations = Quotation::where('lab_id', $lab->id)->get();
 
         return view('quotations.index', compact('quotations'));
     }
-    public function show(Quotation $quotation)
+
+    public function show($qid)
     {
-        $lab = Auth::user()->lab;
+        $user = auth()->user();
+
+        
+        $quotation = Quotation::find($qid);
+    
+        // Si el usuario es administrador, puede ver cualquier cotización
+        if ($user->role === 'admin') {
+            return view('quotations.show', compact('quotation'));
+        }
+    
+        // Si es un laboratorio, verifica que la cotización pertenezca a su lab
+        $lab = $user->lab;
+    
         if (!$lab || $quotation->lab_id !== $lab->id) {
             return redirect()->route('quotations.index')->with('error', 'No tienes acceso a esta cotización.');
         }
-
+    
         return view('quotations.show', compact('quotation'));
     }
+    
 }

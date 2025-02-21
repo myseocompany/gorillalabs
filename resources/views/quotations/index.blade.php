@@ -20,6 +20,7 @@
         <table class="w-full border-collapse border border-gray-300">
             <thead>
                 <tr class="bg-gray-100">
+                    <th class="border border-gray-300 px-4 py-2">Usuario</th>
                     <th class="border border-gray-300 px-4 py-2">Fecha</th>
                     <th class="border border-gray-300 px-4 py-2">Métodos de Pago</th>
                     <th class="border border-gray-300 px-4 py-2">Condición de Pago</th>
@@ -33,6 +34,7 @@
             <tbody>
                 @foreach($quotations as $quotation)
                     <tr class="text-center">
+                        <td class="border border-gray-300 px-4 py-2">{{ $quotation->lab->user->name }}</td>
                         <td class="border border-gray-300 px-4 py-2">{{ $quotation->quotation_date }}</td>
                         <td class="border border-gray-300 px-4 py-2">
                             @foreach($quotation->paymentMethods as $method)

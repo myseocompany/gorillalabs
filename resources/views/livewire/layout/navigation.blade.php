@@ -36,9 +36,18 @@ new class extends Component
                     <x-nav-link :href="url('/')" :active="request()->is('/')" wire:navigate>
                         {{ __('Home') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('customers.index')" :active="request()->is('customers')" wire:navigate>
-                        {{ __('Customers') }}
-                    </x-nav-link>
+                    @if(auth()->check() && auth()->user()->role === 'admin')
+                        <x-nav-link :href="route('labs.index')" :active="request()->routeIs('labs.*')" wire:navigate>
+                            {{ __('Laboratorios') }}
+                        </x-nav-link>
+                    @endif
+                    
+                    @if(auth()->check() && auth()->user()->role === 'admin')
+                    
+                        <x-nav-link :href="route('customers.index')" :active="request()->is('customers')" wire:navigate>
+                            {{ __('Customers') }}
+                        </x-nav-link>
+                    @endif    
                     <x-nav-link :href="route('quotations.index')" :active="request()->routeIs('quotations.*')" wire:navigate>
                         {{ __('Cotizaciones') }}
                     </x-nav-link>
