@@ -59,9 +59,28 @@ class QuotationController extends Controller
         ]);
         
 
-        $fileUrl = null;
         if ($request->hasFile('file')) {
-            $fileUrl = $request->file('file')->store('quotations', 'public');
+            // Guardar el archivo en storage/app/public/quotations
+            $filePath = $request->file('file')->store('quotations', 'public');
+    
+            // Obtener la ruta absoluta en storage
+            $storagePath = storage_path("app/public/{$filePath}");
+    
+            // Ruta donde queremos copiar el archivo en public_html
+            $publicPath = base_path("../public_html/storage/{$filePath}");
+    
+            // Asegurar que la carpeta de destino existe en public_html/storage/quotations
+            $publicStoragePath = dirname($publicPath);
+            if (!file_exists($publicStoragePath)) {
+                mkdir($publicStoragePath, 0775, true);
+            }
+    
+            // Copiar el archivo a public_html/storage/quotations
+            if (copy($storagePath, $publicPath)) {
+                $fileUrl = "storage/{$filePath}"; // URL accesible desde el navegador
+            } else {
+                return redirect()->back()->with('error', 'Error al copiar el archivo a public_html.');
+            }
         }
 
         $quotation = Quotation::create([
