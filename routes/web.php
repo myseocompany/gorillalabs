@@ -86,3 +86,12 @@ Route::post('/clear-cache', function () {
 
 
 
+
+Route::get('/create-symlink', function () {
+    try {
+        Artisan::call('storage:link');
+        return "Symlink creado exitosamente!";
+    } catch (\Exception $e) {
+        return "Error al crear el symlink: " . $e->getMessage();
+    }
+});
