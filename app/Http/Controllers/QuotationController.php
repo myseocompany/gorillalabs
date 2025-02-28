@@ -67,7 +67,7 @@ class QuotationController extends Controller
             $storagePath = storage_path("app/public/{$filePath}");
     
             // Ruta donde queremos copiar el archivo en public_html
-            $publicPath = base_path("../public_html/storage/{$filePath}");
+            $publicPath = base_path("../../public_html/storage/{$filePath}");
     
             // Asegurar que la carpeta de destino existe en public_html/storage/quotations
             $publicStoragePath = dirname($publicPath);
