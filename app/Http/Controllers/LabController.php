@@ -198,15 +198,25 @@ public function store(Request $request)
     /**
      * Muestra el formulario de edición de un laboratorio.
      */
-    public function edit()
+    public function edit(Request $request)
     {
-        $lab = auth()->user()->lab;
+        $user = auth()->user();
+        $id = $request->id;
+        
+        // Si es administrador, puede ver cualquier laboratorio
+        if ($user->role === 'admin') {
+            if ($id) {
+                $lab = Lab::find($id);
+                if (!$lab) {
+                    return redirect()->route('labs.index')->with('error', 'Laboratorio no encontrado.');
+                }
+                return view('labs.edit', compact('lab'));
+            }
     
-        if (!$lab) {
-            return redirect()->route('home')->with('error', 'No tienes un laboratorio asignado.');
+            // Si no se proporciona un ID, muestra la lista de todos los laboratorios
+            $labs = Lab::all();
+            return view('labs.index', compact('labs'));
         }
-    
-        return view('labs.edit', compact('lab'));
     }
     
     
@@ -215,44 +225,73 @@ public function store(Request $request)
      * Actualiza la información de un laboratorio.
      */
     public function update(Request $request)
-    {
-        $lab = auth()->user()->lab;
+{
+    $user = auth()->user();
+    $id = $request->id;
 
-        if (!$lab) {
-            return redirect()->route('home')->with('error', 'No tienes permiso para actualizar este laboratorio.');
-        }
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'nit' => 'nullable|string|max:255',
-            'contact_person' => 'nullable|string|max:255',
-            'contact_phone' => 'nullable|string|max:255',
-            'contact_email' => 'nullable|email|max:255',
-            'city' => 'nullable|string|max:255',
-            'department' => 'nullable|string|max:255',
-            'address' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'administrative_acts' => 'nullable|string',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date',
-            'resolution_compliance' => 'nullable|string|max:255',
-            'attention_channels' => 'nullable|string',
-            'accreditation_onac' => 'required|boolean',
-            'accreditation_ideam' => 'required|boolean',
-        ]);
-
-        $lab->update($request->all());
-
-        return redirect($request->input('previous_url', route('labs.show', $lab->id)))
-        ->with('success', 'Laboratorio actualizado con éxito.');
+    // Si es administrador, edita cualquier laboratorio
+    if ($user->role === 'admin' && $id) {
+        $lab = Lab::find($id);
+    } else {
+        // Si no es admin, solo puede actualizar su laboratorio
+        $lab = $user->lab;
     }
 
+    if (!$lab) {
+        return redirect()->route('home')->with('error', 'No tienes permiso para actualizar este laboratorio.');
+    }
+
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'nit' => 'nullable|string|max:255',
+        'contact_person' => 'nullable|string|max:255',
+        'contact_phone' => 'nullable|string|max:255',
+        'contact_email' => 'nullable|email|max:255',
+        'city' => 'nullable|string|max:255',
+        'department' => 'nullable|string|max:255',
+        'address' => 'nullable|string|max:255',
+        'phone' => 'nullable|string|max:255',
+        'email' => 'nullable|email|max:255',
+        'administrative_acts' => 'nullable|string',
+        'start_date' => 'nullable|date',
+        'end_date' => 'nullable|date',
+        'resolution_compliance' => 'nullable|string|max:255',
+        'attention_channels' => 'nullable|string',
+        'accreditation_onac' => 'required|boolean',
+        'accreditation_ideam' => 'required|boolean',
+    ]);
+
+    $lab->update($request->all());
+
+    return redirect($request->input('previous_url', route('labs.show', $lab->id)))
+        ->with('success', 'Laboratorio actualizado con éxito.');
+}
 
 
-    public function show()
+
+
+    public function show(Request $request)
     {
-        $lab = auth()->user()->lab;
+        $user = auth()->user();
+        $id = $request->id;
+        
+        // Si es administrador, puede ver cualquier laboratorio
+        if ($user->role === 'admin') {
+            if ($id) {
+                $lab = Lab::find($id);
+                if (!$lab) {
+                    return redirect()->route('labs.index')->with('error', 'Laboratorio no encontrado.');
+                }
+                return view('labs.show', compact('lab'));
+            }
+    
+            // Si no se proporciona un ID, muestra la lista de todos los laboratorios
+            $labs = Lab::all();
+            return view('labs.index', compact('labs'));
+        }
+    
+        // Si es usuario normal, solo ve su propio laboratorio
+        $lab = $user->lab;
     
         if (!$lab) {
             return redirect()->route('home')->with('error', 'No tienes un laboratorio asignado.');
@@ -260,6 +299,7 @@ public function store(Request $request)
     
         return view('labs.show', compact('lab'));
     }
+    
     
 
 }

@@ -42,6 +42,9 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/labs/edit', [LabController::class, 'edit'])->name('labs.edit')->middleware('auth');
 Route::post('/labs/{lab}/update', [LabController::class, 'update'])->middleware(['auth'])->name('labs.update');
 Route::get('/labs', [LabController::class, 'show'])->name('labs.show')->middleware('auth');
+Route::post('/labs/update', [LabController::class, 'update'])->name('labs.update');
+
+
 
 /*
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -63,7 +66,7 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('/labs/{lab}/assign-user', [LabController::class, 'assignUser'])->name('labs.assign-user');
     Route::delete('/labs/{lab}', [LabController::class, 'destroy'])->name('labs.destroy');
     Route::post('/labs/update-user', [LabController::class, 'updateUser'])->name('labs.update-user');
-    
+    Route::post('/labs', [LabController::class, 'store'])->name('labs.store');
 });
 
 Route::get('/labs/{lab}/create-user', [LabController::class, 'createUserForm'])
@@ -86,12 +89,3 @@ Route::post('/clear-cache', function () {
 
 
 
-
-Route::get('/create-symlink', function () {
-    try {
-        Artisan::call('storage:link');
-        return "Symlink creado exitosamente!";
-    } catch (\Exception $e) {
-        return "Error al crear el symlink: " . $e->getMessage();
-    }
-});

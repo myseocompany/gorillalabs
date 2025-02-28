@@ -55,9 +55,9 @@
                     
                     
                     <td class="border px-4 py-2 text-center space-x-2">
-                        <a href="{{ route('labs.show', $lab) }}" class="text-blue-600 hover:underline">Ver</a>
+                        <a href="{{ route('labs.show', ['id'=>$lab->id]) }}" class="text-blue-600 hover:underline">Ver</a>
                         @if(auth()->user()->role === 'admin')
-                            <a href="{{ route('labs.edit', $lab) }}" class="text-yellow-600 hover:underline">Editar</a>
+                            <a href="{{ route('labs.edit', ['id'=>$lab->id]) }}" class="text-yellow-600 hover:underline">Editar</a>
                             <form action="{{ route('labs.destroy', $lab) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')

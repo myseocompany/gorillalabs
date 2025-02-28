@@ -10,9 +10,10 @@
         </div>
     @endif
 
-    <form action="{{ route('labs.update', $lab) }}" method="POST">
+    <form action="{{ route('labs.update') }}" method="POST">
         @csrf
         <input type="hidden" name="previous_url" value="{{ request('previous', url()->previous()) }}">
+        <input type="hidden" name="id" value="{{ $lab->id }}">
 
         <div class="grid grid-cols-3 gap-6">
             <!-- Columna 1 -->
