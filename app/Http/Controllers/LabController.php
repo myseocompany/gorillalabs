@@ -136,52 +136,55 @@ class LabController extends Controller
      * Mostrar el formulario de creación de laboratorio.
      */
     public function create()
-    {
-        return view('lab_profiles.create');
+{
+    // Verifica si el usuario es administrador
+    if (auth()->user()->role !== 'admin') {
+        return redirect('/')->with('error', 'No tienes permisos para acceder.');
     }
 
-    /**
-     * Guardar el perfil de laboratorio en la base de datos.
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'contact_person' => 'required|string|max:250',
-            'contact_phone' => 'required|string|max:150',
-            'contact_email' => 'required|email|max:250',
-            'lab_name' => 'required|string|max:250',
-            'specialization' => 'nullable|string|max:250',
-            'license_number' => 'nullable|string|max:100',
-            'address' => 'nullable|string',
-            'city' => 'nullable|string|max:100',
-            'state' => 'nullable|string|max:100',
-            'postal_code' => 'nullable|string|max:50',
-            'country' => 'nullable|string|max:100',
-            'phone' => 'nullable|string|max:150',
-            'fax' => 'nullable|string|max:150',
-            'website' => 'nullable|url|max:250',
-        ]);
+    return view('labs.create');
+}
 
-        LabProfile::create([
-            'user_id' => Auth::id(),
-            'contact_person' => $request->contact_person,
-            'contact_phone' => $request->contact_phone,
-            'contact_email' => $request->contact_email,
-            'lab_name' => $request->lab_name,
-            'specialization' => $request->specialization,
-            'license_number' => $request->license_number,
-            'address' => $request->address,
-            'city' => $request->city,
-            'state' => $request->state,
-            'postal_code' => $request->postal_code,
-            'country' => $request->country,
-            'phone' => $request->phone,
-            'fax' => $request->fax,
-            'website' => $request->website,
-        ]);
-
-        return redirect()->route('home')->with('success', 'Perfil de laboratorio creado correctamente.');
+public function store(Request $request)
+{
+    // Verifica si el usuario es administrador
+    if (auth()->user()->role !== 'admin') {
+        return redirect('/')->with('error', 'No tienes permisos para realizar esta acción.');
     }
+
+    // Validar datos
+    $request->validate([
+        'name' => 'required|string|max:255|unique:labs,name',
+        'nit' => 'required|string|max:50|unique:labs,nit',
+        'email' => 'required|email|unique:labs,email',
+        'contact_person' => 'required|string|max:255',
+        'contact_phone' => 'required|string|max:50',
+        'city' => 'nullable|string|max:255',
+        'department' => 'nullable|string|max:255',
+        'address' => 'nullable|string|max:255',
+        'phone' => 'nullable|string|max:50',
+        'accreditation_onac' => 'required|boolean',
+        'accreditation_ideam' => 'required|boolean',
+    ]);
+
+    // Crear laboratorio
+    $lab = Lab::create([
+        'name' => $request->name,
+        'nit' => $request->nit,
+        'email' => $request->email,
+        'contact_person' => $request->contact_person,
+        'contact_phone' => $request->contact_phone,
+        'city' => $request->city,
+        'department' => $request->department,
+        'address' => $request->address,
+        'phone' => $request->phone,
+        'accreditation_onac' => $request->accreditation_onac,
+        'accreditation_ideam' => $request->accreditation_ideam,
+    ]);
+
+    return redirect()->route('labs.index')->with('success', 'Laboratorio creado correctamente.');
+}
+
 
     public function destroy($id)
     {
