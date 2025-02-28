@@ -32,8 +32,8 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app/private'),
-            #'root' => base_path('../public_html/storage'),
+            #'root' => storage_path('app/private'),
+            'root' => base_path('../public_html/storage'),
             'serve' => true,
             'throw' => false,
         ],
