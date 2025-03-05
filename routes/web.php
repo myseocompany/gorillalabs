@@ -11,7 +11,7 @@ Route::get('/', [IndexController::class, 'index'])->name('home');
 
 Route::view('/result', 'result')->name('result');
 Route::view('/promo', 'promo')->name('promo');
-Route::view('/promo/thanks', 'promo')->name('promo-thanks');
+Route::view('/thanks', 'thanks')->name('thanks');
 
 
 Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
