@@ -21,14 +21,14 @@
     <!-- End Google Tag Manager (noscript) -->
     Gracias, nos contactarémos pronto contigo.
 
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16757419033"></script>
+    <!-- Event snippet for Thank page conversion page -->
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-16757419033');
-</script>
+    gtag('event', 'conversion', {
+        'send_to': 'AW-16757419033/svcKCO7t06YaEJnYx7Y-',
+        'value': 1.0,
+        'currency': 'COP'
+    });
+  </script>
+  
 </body>
 </html>
