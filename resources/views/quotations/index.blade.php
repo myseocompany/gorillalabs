@@ -47,7 +47,7 @@
                         <td class="border border-gray-300 px-4 py-2">{{ $quotation->ideam_accreditation ? 'Sí' : 'No' }}</td>
                         <td class="border border-gray-300 px-4 py-2">
                             @if($quotation->file_url)
-                                <a href="{{ $quotation->file_url }}" target="_blank" class="text-blue-500 underline">Ver Archivo</a>
+                                <a href="{{ dd($quotation->file_url) }}" target="_blank" class="text-blue-500 underline">Veraa Archivo</a>
                             @else
                                 No adjunto
                             @endif
