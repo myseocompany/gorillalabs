@@ -43,7 +43,7 @@
     <div class="mt-6">
         <label class="block font-medium text-gray-700">Archivo Adjunto</label>
         @if($quotation->file_url)
-            <a href="{{ $quotation->file_url }}" target="_blank" class="text-blue-500 underline">Ver Archivo</a>
+            <a href="{{ asset('storage/' . $quotation->file_url) }}" target="_blank" class="text-blue-500 underline">Ver Archivo</a>
         @else
             <p class="text-gray-500">No adjunto</p>
         @endif

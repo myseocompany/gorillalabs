@@ -77,7 +77,7 @@ class QuotationController extends Controller
     
             // Copiar el archivo a public_html/storage/quotations
             if (copy($storagePath, $publicPath)) {
-                $fileUrl = "storage/{$filePath}"; // URL accesible desde el navegador
+                $fileUrl = $filePath; // URL accesible desde el navegador
             } else {
                 return redirect()->back()->with('error', 'Error al copiar el archivo a public_html.');
             }
